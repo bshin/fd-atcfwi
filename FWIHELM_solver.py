@@ -1,6 +1,5 @@
 import numpy as np
 import FWIHELM_helper
-from numba import njit
 from scipy.sparse.linalg import gmres
 from scipy.sparse import lil_matrix, diags, kron, eye
 from joblib import Parallel, delayed
@@ -67,7 +66,6 @@ def gen_dobs_per_source(mModel, nFreq, srcSignal, srcFreqbins, srcGridx, srcGrid
     return dObs, wavefieldObs
 
 
-@njit()
 def alpha(omega, dx, dz, velocity) -> float:
     """
     Alpha value for iterative solvers
