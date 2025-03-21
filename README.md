@@ -5,6 +5,12 @@ As long as the seismic network graph is connected, each receiver in the network 
 
 The code uses GMRES to solve the Helmholtz equation with 2nd Clayton-Enquist boundary conditions. The forward solver is a Python version of the Helmholtz solver implemented in [Fast Helmholtz solver](https://github.com/vkazei/fastHelmholtz/).
 
+<p align=center>
+<img src="fd-atcfwi-result.png" alt="ATC-FWI result" width="70%" height="70%">
+</p>
+
+The figure shows reconstruction of the Marmousi benchmark model at different receivers whose location is indicated by the triangle.
+
 ## Running the script
 The main file is `FWIHELM_MAIN.py` where you can select the algorithm (`FWI`or `ATCFWI`) and the subsurface model (`two_ellipses` or `marmousi`). In `config.py` predefined parameter and simulation settings are stored which are loaded by the script.
 If you want to play with parameter settings, you can do that there.
@@ -20,7 +26,7 @@ If you want to play with parameter settings, you can do that there.
 - pyprind
 
 ## Citation
-If you use this code for your work, please consider citing the following papers:
+If you find our work helpful, please consider citing the following papers:
 
 ```
 @article{Shin2025a,
@@ -37,3 +43,5 @@ If you use this code for your work, please consider citing the following papers:
   year={2025}
 }
 ```
+
+Thank you 🌠
