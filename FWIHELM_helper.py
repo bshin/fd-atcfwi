@@ -161,87 +161,88 @@ def gen_ground_truth(simulationPar, vTruePar, **kwargs):
     :return: velocityModel
     """
 
-    gridSize = simulationPar["gridSize"]
-    xValues = simulationPar["xValues"]
-    zValues = simulationPar["zValues"]
     modelType = vTruePar["vTrueType"]
-    vMin = vTruePar["vMin"]
 
-    N_GRID_X, N_GRID_Z = gridSize
-
-    velocityModel = np.zeros((N_GRID_X, N_GRID_Z))
-
-    if modelType == "layer":
-        layerDepths = kwargs["layerDepths"]
-        idStart = 0
-        for layerId, layer in enumerate(layerDepths):
-            idz = find_index_from_value(zValues, layer)
-            velocityModel[:, idStart:idz] = vMin[layerId]
-            idStart = idz
-        
-        velocityModel[:, idStart:] = vMin[-1]  # last layer
-
-    elif modelType == "ellipse":
-        velocityModel = np.full((N_GRID_X, N_GRID_Z), min(vMin))
-        vpAnomaly = vTruePar["vpAnomaly"]
-        anomCenter = vTruePar["anomCenter"]
-        anomRadius = vTruePar["anomRadius"]
-        cidx = find_index_from_value(xValues, anomCenter[0])
-        cidz = find_index_from_value(zValues, anomCenter[1])
-        radiusx = find_index_from_value(xValues, anomRadius[0])
-        radiusz = find_index_from_value(zValues, anomRadius[1])
-        rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
-        velocityModel[rr, cc] = vpAnomaly
-
-    elif modelType == "homogeneous":
-        velocityModel = np.full((N_GRID_X, N_GRID_Z), min(vMin))  # TODO: substitute min(vp)
-
-    elif modelType == "ellipse_grad":
-        vMax = vTruePar["vMax"]
-        vpAnomaly = vTruePar["vpAnomaly"]
-        anomCenter = vTruePar["anomCenter"]
-        anomRadius = vTruePar["anomRadius"]
-
-        velocityModel = np.linspace(vMin, vMax, N_GRID_Z)
-        velocityModel = np.tile(velocityModel, (N_GRID_X, 1))
-
-        cidx = find_index_from_value(xValues, anomCenter[0])
-        cidz = find_index_from_value(zValues, anomCenter[1])
-        radiusx = find_index_from_value(xValues, anomRadius[0])
-        radiusz = find_index_from_value(zValues, anomRadius[1])
-        rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
-        velocityModel[rr, cc] = vpAnomaly
-
-    elif modelType == "two_ellipses":
-        vMax = vTruePar["vMax"]
-        vp1, vp2 = vTruePar["vpAnomaly"]
-        [center1, center2] = vTruePar["anomCenter"]
-        [radius1, radius2] = vTruePar["anomRadius"]
-
-        velocityModel = np.linspace(vMin, vMax, N_GRID_Z)
-        velocityModel = np.tile(velocityModel, (N_GRID_X, 1))
-
-        # anomaly 1
-        cidx = find_index_from_value(xValues, center1[0])
-        cidz = find_index_from_value(zValues, center1[1])
-        radiusx = find_index_from_value(xValues, radius1[0])
-        radiusz = find_index_from_value(zValues, radius1[1])
-
-        rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
-        velocityModel[rr, cc] = vp1
-
-        # anomaly 2
-        cidx = find_index_from_value(xValues, center2[0])
-        cidz = find_index_from_value(zValues, center2[1])
-        radiusx = find_index_from_value(xValues, radius2[0])
-        radiusz = find_index_from_value(zValues, radius2[1])
-
-        rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
-        velocityModel[rr, cc] = vp2
-
-    elif modelType == "marmousi":
+    if modelType == "marmousi":
         # load benchmark model
         velocityModel, simulationPar = load_benchmark_model(simulationPar, benchModel=modelType)
+    else:
+        gridSize = simulationPar["gridSize"]
+        xValues = simulationPar["xValues"]
+        zValues = simulationPar["zValues"]
+        vMin = vTruePar["vMin"]
+
+        N_GRID_X, N_GRID_Z = gridSize
+
+        velocityModel = np.zeros((N_GRID_X, N_GRID_Z))
+
+        if modelType == "layer":
+            layerDepths = kwargs["layerDepths"]
+            idStart = 0
+            for layerId, layer in enumerate(layerDepths):
+                idz = find_index_from_value(zValues, layer)
+                velocityModel[:, idStart:idz] = vMin[layerId]
+                idStart = idz
+            
+            velocityModel[:, idStart:] = vMin[-1]  # last layer
+
+        elif modelType == "ellipse":
+            velocityModel = np.full((N_GRID_X, N_GRID_Z), min(vMin))
+            vpAnomaly = vTruePar["vpAnomaly"]
+            anomCenter = vTruePar["anomCenter"]
+            anomRadius = vTruePar["anomRadius"]
+            cidx = find_index_from_value(xValues, anomCenter[0])
+            cidz = find_index_from_value(zValues, anomCenter[1])
+            radiusx = find_index_from_value(xValues, anomRadius[0])
+            radiusz = find_index_from_value(zValues, anomRadius[1])
+            rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
+            velocityModel[rr, cc] = vpAnomaly
+
+        elif modelType == "homogeneous":
+            velocityModel = np.full((N_GRID_X, N_GRID_Z), min(vMin))  # TODO: substitute min(vp)
+
+        elif modelType == "ellipse_grad":
+            vMax = vTruePar["vMax"]
+            vpAnomaly = vTruePar["vpAnomaly"]
+            anomCenter = vTruePar["anomCenter"]
+            anomRadius = vTruePar["anomRadius"]
+
+            velocityModel = np.linspace(vMin, vMax, N_GRID_Z)
+            velocityModel = np.tile(velocityModel, (N_GRID_X, 1))
+
+            cidx = find_index_from_value(xValues, anomCenter[0])
+            cidz = find_index_from_value(zValues, anomCenter[1])
+            radiusx = find_index_from_value(xValues, anomRadius[0])
+            radiusz = find_index_from_value(zValues, anomRadius[1])
+            rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
+            velocityModel[rr, cc] = vpAnomaly
+
+        elif modelType == "two_ellipses":
+            vMax = vTruePar["vMax"]
+            vp1, vp2 = vTruePar["vpAnomaly"]
+            [center1, center2] = vTruePar["anomCenter"]
+            [radius1, radius2] = vTruePar["anomRadius"]
+
+            velocityModel = np.linspace(vMin, vMax, N_GRID_Z)
+            velocityModel = np.tile(velocityModel, (N_GRID_X, 1))
+
+            # anomaly 1
+            cidx = find_index_from_value(xValues, center1[0])
+            cidz = find_index_from_value(zValues, center1[1])
+            radiusx = find_index_from_value(xValues, radius1[0])
+            radiusz = find_index_from_value(zValues, radius1[1])
+
+            rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
+            velocityModel[rr, cc] = vp1
+
+            # anomaly 2
+            cidx = find_index_from_value(xValues, center2[0])
+            cidz = find_index_from_value(zValues, center2[1])
+            radiusx = find_index_from_value(xValues, radius2[0])
+            radiusz = find_index_from_value(zValues, radius2[1])
+
+            rr, cc = ellipse(cidx, cidz, radiusx, radiusz)
+            velocityModel[rr, cc] = vp2
 
     return velocityModel, simulationPar
 
@@ -250,21 +251,16 @@ def load_benchmark_model(simulationPar, benchModel):
 
     if benchModel == "marmousi":
 
-        marmousi = np.fromfile('benchmark_models/marmousi/vp.bin', np.float32)
+        marmousi = np.fromfile('benchmark_models/marmousi_vp.bin', np.float32)
         marmousi = np.reshape(marmousi, (2301, 751))
         
         vTrue = marmousi[::8, ::8]  # downsample model
         vTrue = vTrue[50:200, 10:70]
         vTrue = 0.6 * vTrue / 1e3  # cut model and convert velocity into km/s
 
-        # vTrue = marmousi[::2, ::2]
-        # vTrue = vTrue[:500, :300]
-        # vTrue = 0.4 * vTrue / 1e3
-
         # overwrite physical dimensions
         simulationPar["gridSize"] = np.shape(vTrue)
         simulationPar["spacing"] = (10/1e3, 10/1e3)  # in km
-        # simulationPar["spacing"] = (5/1e3, 5/1e3)  # in km
         simulationPar["domainShape"] = (vTrue.shape[0] * simulationPar["spacing"][0], vTrue.shape[1] * simulationPar["spacing"][1])
 
     else:

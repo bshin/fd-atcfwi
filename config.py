@@ -12,7 +12,7 @@ def load_config(algorithm, subsurface):
         # Define domain parameters
         xMeters = 1.4   # domain width (km)
         zMeters = 0.5   # domain depth (km)
-        dx = dz = 0.02  # cell size (km)
+        dx = dz = 0.01  # cell size (km)
 
         domainShape, spacing, gridSize, xValues, zValues = FWIHELM_helper.set_geometry(xMeters, zMeters, dx, dz)
 
