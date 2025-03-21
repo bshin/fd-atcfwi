@@ -44,4 +44,4 @@ If you find our work helpful, please consider citing the following papers:
 }
 ```
 
-Thank you 😏
+Thank you 🌠
