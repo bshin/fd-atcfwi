@@ -9,7 +9,7 @@ The code uses GMRES to solve the Helmholtz equation with 2nd Clayton-Enquist bou
 <img src="fd-atcfwi-result.png" alt="ATC-FWI result" width="70%" height="70%">
 </p>
 
-The figure shows reconstruction of the Marmousi benchmark model at different receivers.
+The figure shows reconstruction of the Marmousi benchmark model at different receivers whose location is indicated by the triangle.
 
 ## Running the script
 The main file is `FWIHELM_MAIN.py` where you can select the algorithm (`FWI`or `ATCFWI`) and the subsurface model (`two_ellipses` or `marmousi`). In `config.py` predefined parameter and simulation settings are stored which are loaded by the script.
