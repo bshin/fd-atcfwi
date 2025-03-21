@@ -24,7 +24,7 @@ If you want to play with parameter settings, you can do that there.
 - pyprind
 
 ## Citation
-If you use this code for your work, please consider citing the following papers:
+If you use (parts of) this code for your work, please consider citing the following papers:
 
 ```
 @article{Shin2025a,
