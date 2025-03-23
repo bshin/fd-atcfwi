@@ -1,4 +1,4 @@
-# Frequency-Domain Adapt-Then-Combine Full Waveform Inversion
+# Frequency-Domain Adapt-Then-Combine Full Waveform Inversion (FD-ATCFWI)
 
 This repository implements the Frequency-Domain Adapt-Then-Combine Full Waveform Inversion (FD-ATCFWI) with Tikhonov and total variation regularization for distributed, high-resolution subsurface imaging in seismic networks.
 As long as the seismic network graph is connected, each receiver in the network obtains a subsurface image locally via data exchange with directly connected receivers. 
