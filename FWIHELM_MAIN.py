@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     np.random.seed(1234)  # set seed state for reproducibility
 
-    algorithm  = "FWI"  # select between "FWI" or "ATCFWI"
+    algorithm  = "ATCFWI"  # select between "FWI" or "ATCFWI"
     subsurface = "marmousi"  # select between "marmousi" or "two_ellipses"
     simName    = algorithm + "_" + subsurface
     saveData   = False
