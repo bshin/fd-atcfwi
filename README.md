@@ -29,14 +29,7 @@ If you want to play with parameter settings, you can do that there.
 If you find our work helpful, please consider citing the following papers:
 
 ```
-@article{Shin2025a,
-  author = {Shin, Ban-Sok and Shutin, Dmitriy},
-  title = {Distributed Full Waveform Inversion in the Frequency Domain for Seismic Networks},
-  journal = {IEEE Geoscience and Remote Sensing Letters},
-  year={2025}
-}
-
-@inproceedings{Shin2025b,
+@inproceedings{Shin2025,
   author = {Shin, Ban-Sok and Shutin, Dmitriy},
   title = {Distributed Subsurface Imaging with Tikhonov and Total Variation Regularization for Seismic Networks},
   booktitle = {European Signal Processing Conference (EUSIPCO)},
