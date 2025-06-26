@@ -1,8 +1,6 @@
 import numpy as np
 import FWIHELM_helper
 
-# define frequencies here
-# define vTruePar here, also ground truth model if marmousi is selected
 
 def load_config(algorithm, subsurface):
     

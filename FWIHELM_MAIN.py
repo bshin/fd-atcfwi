@@ -7,9 +7,6 @@ import FWIHELM_plot
 
 import config 
 
-# TODO:
-# - add option to turn Tikh+TV reg. on/off
-# - write a nice README for documentation
 
 if __name__ == "__main__":
 
