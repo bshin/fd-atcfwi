@@ -1,11 +1,12 @@
 import numpy as np
+import os
 
 import FWIHELM_solver
 import FWIHELM_helper
 import FWIHELM_inversion
 import FWIHELM_plot
 
-import config 
+import config
 
 
 if __name__ == "__main__":
@@ -31,12 +32,12 @@ if __name__ == "__main__":
 
     # set up starting model
     vStart = FWIHELM_helper.gen_starting_model(vTrue, vTruePar)
-    
+
     # set source coordinates
     srcGridCoords, srcCoords = FWIHELM_helper.set_sources(simulationPar)
     # set receiver coordinates
     recGridCoords, recCoords = FWIHELM_helper.set_receivers(simulationPar, mode="surface")
-    # Generate data sampling matrix    
+    # Generate data sampling matrix
     samplingMatP = FWIHELM_solver.getP(recGridCoords, simulationPar)
 
     # convert velocity model into squared slowness model
@@ -48,31 +49,32 @@ if __name__ == "__main__":
 
     if algorithm == "FWI":
 
-        """  ===== DO FULL WAVEFORM INVERSION ===== """        
+        """  ===== DO FULL WAVEFORM INVERSION ===== """
 
-        mEst, vEst, cost, nmse, ssim = FWIHELM_inversion.do_fwi(dObs, mTrue, mStart, srcSignal, srcFreqbins, srcGridCoords, recGridCoords, 
+        mEst, vEst, cost, nmse, ssim = FWIHELM_inversion.do_fwi(dObs, mTrue, mStart, srcSignal, srcFreqbins, srcGridCoords, recGridCoords,
                                                                 samplingMatP, simulationPar, algPar, vTruePar, simName=simName)
-        
+
         # plot results
         FWIHELM_plot.plot_results(mTrue, mStart, mEst, cost, simulationPar, cmap="viridis")
-        
+
 
     elif algorithm == "ATCFWI":
 
         """  ===== DO ADAPT-THEN-COMBINE FULL WAVEFORM INVERSION ===== """
-        
-        mEst, vEst, cost, nmse, ssim = FWIHELM_inversion.do_atcfwi(dObs, mTrue, mStart, srcSignal, srcFreqbins, srcGridCoords, recGridCoords, 
+
+        mEst, vEst, cost, nmse, ssim = FWIHELM_inversion.do_atcfwi(dObs, mTrue, mStart, srcSignal, srcFreqbins, srcGridCoords, recGridCoords,
                                                                    samplingMatP, simulationPar, algPar, vTruePar, simName=simName)
-        
-        # save results data
+
+    # save results data
     if saveData == True:
         folder   = "sim_results/"
         filename = FWIHELM_helper.gen_filename(algPar, simulationPar, vTruePar)
-        np.savez(folder+filename, 
-                 vTrue=vTrue, vStart=vStart, vEst=vEst, mEst=mEst, 
+        save_path = folder + filename
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        np.savez(save_path,
+                 vTrue=vTrue, vStart=vStart, vEst=vEst, mEst=mEst,
                  cost=cost, nmse=nmse, ssim=ssim,
                  srcCoords=srcCoords, recCoords=recCoords,
-                 algPar=algPar, 
+                 algPar=algPar,
                  simulationPar=simulationPar,
                  vTruePar=vTruePar)
-    
