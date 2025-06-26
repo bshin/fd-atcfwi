@@ -20,12 +20,12 @@ def set_geometry(xMeters, zMeters, dx, dz):
 
 def calc_nmse(xEst, xTrue):
     # nmse between two arrays, xEst is estimation of xTrue
-    return np.linalg.norm(xEst-xTrue)**2 / np.linalg.norm(xTrue)**2 
+    return np.linalg.norm(xEst-xTrue)**2 / np.linalg.norm(xTrue)**2
 
 
 def gen_filename(algPar, simulationPar, vTruePar):
 
-    freqVector = simulationPar["freqVector"]    
+    freqVector = algPar["freqVector"]
     vTrueType = vTruePar["vTrueType"]
     algorithm = algPar["algorithm"]
     tvRegPar  = algPar["tvRegPar"]
@@ -37,8 +37,8 @@ def gen_filename(algPar, simulationPar, vTruePar):
 
     fMin = freqVector.min()
     fMax = freqVector.max()
-    
-    # ground truth, algorithm, tv on/off, nrec, nsrc, srcFreq, snrdb, 
+
+    # ground truth, algorithm, tv on/off, nrec, nsrc, srcFreq, snrdb,
     if algorithm == "ATCFWI-LESS":
         exchInterval = algPar["exchInterval"]
         fileName = algorithm+"_"+vTrueType+"_"+str(exchInterval)+"_freq="+str(fMin)+"-"+str(fMax)+"_tv="+tvMethod+"_tvRegPar="+str(tvRegPar)+"_srcFreq="+str(srcFreq)+"Hz_rec="+str(N_REC)+"_src="+str(N_SRC)+"_snr="+str(snr)
@@ -62,7 +62,7 @@ def find_index_from_value(array1d, value):
 def ricker_wavelet_freq(freqDom):
     """
     Return ricker wavelet in frequency domain
-    :param omega: frequency of interest 
+    :param omega: frequency of interest
     :param omegaP: center angular frequency (rad)
     :return: ricker wavelet in freq. domain
     """
@@ -74,7 +74,7 @@ def ricker_wavelet_freq(freqDom):
 
     N_FFT = 2048
     time = np.arange(0, 1+1/fs, 1/fs)
-    
+
     rickerTime = (1 - 2*np.pi**2*freqDom**2*(time-0.1)**2)*np.exp(-np.pi**2*freqDom**2*(time-0.1)**2)
     rickerFreq = np.fft.fft(rickerTime, N_FFT)
     freqVector = np.linspace(0, fs, N_FFT)
@@ -91,7 +91,7 @@ def gen_line_topology(N_REC, neighNo):
     :param neighNo: no. of neighbors for each receiver on one side
     :return:
     """
-    
+
     adjVec = np.zeros(N_REC)
     adjVec[1:neighNo+1] = 1  # defines neighborhood of one sensor
     adjacencyMat = toeplitz(adjVec, adjVec)
@@ -101,7 +101,7 @@ def gen_line_topology(N_REC, neighNo):
 
 
 
-def check_grid_dispersion(dx, freqVector, velocityModel):    
+def check_grid_dispersion(dx, freqVector, velocityModel):
     """
     Get maximum spacing using maximum angular frequency and minimum velocity to avoid grid dispersion.
     :param omega: maximum angular frequency (rad)
@@ -183,7 +183,7 @@ def gen_ground_truth(simulationPar, vTruePar, **kwargs):
                 idz = find_index_from_value(zValues, layer)
                 velocityModel[:, idStart:idz] = vMin[layerId]
                 idStart = idz
-            
+
             velocityModel[:, idStart:] = vMin[-1]  # last layer
 
         elif modelType == "ellipse":
@@ -253,7 +253,7 @@ def load_benchmark_model(simulationPar, benchModel):
 
         marmousi = np.fromfile('benchmark_models/marmousi_vp.bin', np.float32)
         marmousi = np.reshape(marmousi, (2301, 751))
-        
+
         vTrue = marmousi[::8, ::8]  # downsample model
         vTrue = vTrue[50:200, 10:70]
         vTrue = 0.6 * vTrue / 1e3  # cut model and convert velocity into km/s
@@ -271,7 +271,7 @@ def load_benchmark_model(simulationPar, benchModel):
 
 def gen_starting_model(vTrue, vTruePar, **kwargs):
 
-    mode = vTruePar["vStartType"]        
+    mode = vTruePar["vStartType"]
     vStart = np.zeros_like(vTrue)
     nx, nz = vTrue.shape
 
@@ -322,7 +322,7 @@ def set_sources(simulationPar):
 
     srcCoordsGrid = [srcGridx, srcGridz]
     srcCoordsGrid = np.asarray(srcCoordsGrid).T
-    
+
 
     return [srcGridx, srcGridz], [srcx, srcz]
 
@@ -352,8 +352,8 @@ def set_receivers(simulationPar, mode):
     :param mode:
     :return:
     """
-    
-    N_REC = simulationPar["N_REC"] 
+
+    N_REC = simulationPar["N_REC"]
     xMeters, zMeters = simulationPar["domainShape"]
     dx, dz = simulationPar["spacing"]
 
